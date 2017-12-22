@@ -68,7 +68,7 @@ public abstract class BaseBuilder extends Builder implements SimpleBuildStep {
         AzureClientFactory DEFAULT = new AzureClientFactory() {
             @Override
             public Azure createAzureClient(final String credentialsId) {
-                return AzureUtils.buildAzureClient(AzureCredentials.getServicePrincipal(credentialsId));
+                return AzureUtils.buildClient(credentialsId);
             }
         };
     }
@@ -104,8 +104,7 @@ public abstract class BaseBuilder extends Builder implements SimpleBuildStep {
             final ListBoxModel model = new ListBoxModel(new ListBoxModel.Option(Constants.EMPTY_SELECTION, ""));
 
             if (StringUtils.isNotBlank(azureCredentialsId)) {
-                final Azure azureClient = AzureUtils.buildAzureClient(
-                        AzureCredentials.getServicePrincipal(azureCredentialsId));
+                final Azure azureClient = AzureUtils.buildClient(azureCredentialsId);
                 for (final ResourceGroup rg : azureClient.resourceGroups().list()) {
                     model.add(rg.name());
                 }
@@ -118,8 +117,7 @@ public abstract class BaseBuilder extends Builder implements SimpleBuildStep {
             final ListBoxModel model = new ListBoxModel(new ListBoxModel.Option(Constants.EMPTY_SELECTION, ""));
 
             if (StringUtils.isNotBlank(azureCredentialsId) && StringUtils.isNotBlank(resourceGroup)) {
-                final Azure azureClient = AzureUtils.buildAzureClient(
-                        AzureCredentials.getServicePrincipal(azureCredentialsId));
+                final Azure azureClient = AzureUtils.buildClient(azureCredentialsId);
                 final PagedList<VirtualMachineScaleSet> vmssList =
                         azureClient.virtualMachineScaleSets().listByResourceGroup(resourceGroup);
                 for (final VirtualMachineScaleSet vmss : vmssList) {
